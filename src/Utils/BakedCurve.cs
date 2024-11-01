@@ -77,7 +77,6 @@ public class BakedCurve
         float fa = (2 * t) - 2;
         float fb = (-4 * t) + 2;
         float fc = 2 * t;
-
         return (fa * a) + (fb * b) + (fc * c);
     }
 
@@ -159,6 +158,11 @@ public class BakedCurve
             point = GetCurvePoint(points[i], points[i + 1], points[i + 2], percent);
             derivative = GetCurveDerivative(points[i], points[i + 1], points[i + 2], percent);
         }
+        // Correct very small deviations; When the curvebubble moving vertically or horizontally, avoid it make the camera twitch or won't hitting certain spikes.
+        if (Math.Abs(derivative.X) < 0.004f)
+            derivative.X = 0f;
+        if (Math.Abs(derivative.Y) < 0.004f)
+            derivative.Y = 0f;
     }
 
     public Vector2 GetPointByDistance(float distance)
